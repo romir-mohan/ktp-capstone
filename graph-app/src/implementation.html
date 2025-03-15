@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive Graph</title>
+    <style>
+        body {
+            margin: 0;
+            background-color: darkgrey;
+            overflow: hidden;
+        }
+        #network {
+            width: 100vw;
+            height: 100vh;
+        }
+    </style>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/vis/4.21.0/vis.min.js"></script>
+</head>
+<body>
+    <div id="network"></div>
+    <script type="text/javascript">
+        // Fetch the graph data from the Flask API
+        fetch('/graph')
+            .then(response => response.json())
+            .then(data => {
+                var nodes = new vis.DataSet();
+                var edges = new vis.DataSet();
+
+                // Add nodes
+                data.nodes.forEach(node => {
+                    nodes.add({
+                        id: node.id,  // Use student's name as the node id
+                        label: node.label,  // Label with the student's name
+                        title: node.title,  // Tooltip with the 'about' field or description
+                        image: node.image,  // Profile image if available
+                        shape: node.shape,  // Shape is 'image'
+                        size: node.size,  // Adjust size as needed
+                        color: node.color || 'darkblue'  // Default color as darkblue
+                    });
+                });
+
+                // Add edges
+                data.edges.forEach(edge => {
+                    edges.add({
+                        from: edge.from,  // Node name (student)
+                        to: edge.to,  // Node name (student)
+                        color: edge.color || 'darkblue',  // Default edge color
+                        arrows: edge.arrows || ''  // No arrows for undirected edges
+                    });
+                });
+
+                // Set up the container for the network visualization
+                var container = document.getElementById('network');
+                var options = {
+                    physics: {
+                        enabled: true,
+                        stabilization: { iterations: 100 }
+                    },
+                    layout: {
+                        improvedLayout: true
+                    },
+                    nodes: {
+                        shape: 'dot',  // Use 'dot' shape for nodes
+                        size: 10,  // Default size
+                        color: 'darkblue'
+                    },
+                    edges: {
+                        color: 'darkblue',
+                        width: 1,
+                        smooth: false,
+                        arrows: ''  // Ensure edges remain undirected
+                    }
+                };
+
+                var network = new vis.Network(container, { nodes: nodes, edges: edges }, options);
+
+                // Node selection behavior
+                network.on('selectNode', function (event) {
+                    var nodeId = event.nodes[0];
+
+                    // Get all edges connected to the selected node
+                    var connectedEdges = edges.get({
+                        filter: function (edge) {
+                            return edge.from === nodeId || edge.to === nodeId;
+                        }
+                    });
+
+                    // Reset all nodes and edges to dark blue
+                    nodes.update(nodes.get().map(node => ({ id: node.id, color: 'darkblue' })));
+                    edges.update(edges.get().map(edge => ({ id: edge.id, color: 'darkblue' })));
+
+                    // Highlight the selected node in white
+                    nodes.update({ id: nodeId, color: 'white' });
+
+                    // Highlight all edges connected to the selected node
+                    connectedEdges.forEach(edge => {
+                        edges.update({ id: edge.id, color: 'white' });
+                    });
+                });
+
+                // Reset colors when no node is selected
+                network.on('deselectNode', function () {
+                    nodes.update(nodes.get().map(node => ({ id: node.id, color: 'darkblue' })));
+                    edges.update(edges.get().map(edge => ({ id: edge.id, color: 'darkblue' })));
+                });
+            })
+            .catch(error => console.error('Error fetching graph data:', error));
+    </script>
+</body>
+</html>

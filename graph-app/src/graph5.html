@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive Graph</title>
+    <style>
+        body {
+            margin: 0;
+            background-color: darkgrey;
+            overflow: hidden;
+        }
+        #network {
+            width: 100vw;
+            height: 100vh;
+        }
+    </style>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/vis/4.21.0/vis.min.js"></script>
+</head>
+<body>
+    <div id="network"></div>
+    <script type="text/javascript">
+        var nodes = new vis.DataSet();
+        for (var i = 1; i <= 150; i++) {
+            nodes.add({ id: i, color: 'darkblue' });
+        }
+
+        var edges = new vis.DataSet();
+        var addedEdges = new Set();
+        
+        for (var i = 1; i <= 150; i++) {
+            var numEdges = Math.floor(Math.random() * 3) + 1;
+            for (var j = 0; j < numEdges; j++) {
+                var targetNode = Math.floor(Math.random() * 150) + 1;
+                var edgeKey = `${Math.min(i, targetNode)}-${Math.max(i, targetNode)}`;
+                
+                if (i !== targetNode && !addedEdges.has(edgeKey)) {
+                    addedEdges.add(edgeKey);
+                    edges.add({ id: edgeKey, from: i, to: targetNode, color: 'darkblue', arrows: '' }); // Ensure no arrows
+                }
+            }
+        }
+
+        var container = document.getElementById('network');
+        var data = { nodes: nodes, edges: edges };
+        var options = {
+            physics: {
+                enabled: true,
+                stabilization: { iterations: 100 }
+            },
+            layout: {
+                improvedLayout: true
+            },
+            nodes: {
+                shape: 'dot',
+                size: 10,
+                color: 'darkblue'
+            },
+            edges: {
+                color: 'darkblue',
+                width: 1,
+                smooth: false,
+                arrows: '' // Ensure edges remain undirected
+            }
+        };
+
+        var network = new vis.Network(container, data, options);
+
+        network.on('selectNode', function (event) {
+        var nodeId = event.nodes[0];
+
+        // Get all edges that are connected to the selected node (both incoming and outgoing)
+        var connectedEdges = edges.get({
+            filter: function (edge) {
+                return edge.from === nodeId || edge.to === nodeId;
+            }
+        });
+
+        // Reset all nodes and edges to dark blue
+        nodes.update(nodes.get().map(node => ({ id: node.id, color: 'darkblue' })));
+        edges.update(edges.get().map(edge => ({ id: edge.id, color: 'darkblue' })));
+
+        // Highlight the selected node in white
+        nodes.update({ id: nodeId, color: 'white' });
+
+        // Change all edges connected to the node to white
+        connectedEdges.forEach(edge => {
+            edges.update({ id: edge.id, color: 'white'});
+            });
+        });
+
+        // Reset colors when no node is selected
+        network.on('deselectNode', function () {
+            nodes.update(nodes.get().map(node => ({ id: node.id, color: 'darkblue' })));
+            edges.update(edges.get().map(edge => ({ id: edge.id, color: 'darkblue' })));
+        });
+    </script>
+</body>
+</html>
