@@ -11,8 +11,8 @@
             overflow: hidden;
         }
         #network {
-            width: 100vw;
-            height: 100vh;
+            width: 200vw;
+            height: 200vh;
         }
     </style>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/vis/4.21.0/vis.min.js"></script>
@@ -67,32 +67,48 @@
         var network = new vis.Network(container, data, options);
 
         network.on('selectNode', function (event) {
-        var nodeId = event.nodes[0];
+            var nodeId = event.nodes[0];
 
-        // Get all edges that are connected to the selected node (both incoming and outgoing)
-        var connectedEdges = edges.get({
-            filter: function (edge) {
-                return edge.from === nodeId || edge.to === nodeId;
-            }
-        });
+            // Get all edges that are connected to the selected node (both incoming and outgoing)
+            var connectedEdges = edges.get({
+                filter: function (edge) {
+                    return edge.from === nodeId || edge.to === nodeId;
+                }
+            });
 
-        // Reset all nodes and edges to dark blue
-        nodes.update(nodes.get().map(node => ({ id: node.id, color: 'darkblue' })));
-        edges.update(edges.get().map(edge => ({ id: edge.id, color: 'darkblue' })));
+            // Reset all nodes and edges to dark blue
+            nodes.update(nodes.get().map(node => ({ id: node.id, color: 'darkblue' })));
+            edges.update(edges.get().map(edge => ({ id: edge.id, color: 'darkblue' })));
 
-        // Highlight the selected node in white
-        nodes.update({ id: nodeId, color: 'white' });
+            // Highlight the selected node in white
+            nodes.update({ id: nodeId, color: 'white' });
 
-        // Change all edges connected to the node to white
-        connectedEdges.forEach(edge => {
-            edges.update({ id: edge.id, color: 'white'});
+            // Change all edges connected to the node to white
+            connectedEdges.forEach(edge => {
+                edges.update({ id: edge.id, color: 'white' });
             });
         });
 
-        // Reset colors when no node is selected
+        network.on('selectEdge', function (event) {
+            var edgeId = event.edges[0];
+            var edge = edges.get(edgeId);
+
+            // Reset all nodes to dark blue
+            nodes.update(nodes.get().map(node => ({ id: node.id, color: 'darkblue' })));
+
+            // Highlight the two nodes connected to the edge in white
+            nodes.update({ id: edge.from, color: 'white' });
+            nodes.update({ id: edge.to, color: 'white' });
+        });
+
+        // Reset colors when no node or edge is selected
         network.on('deselectNode', function () {
             nodes.update(nodes.get().map(node => ({ id: node.id, color: 'darkblue' })));
             edges.update(edges.get().map(edge => ({ id: edge.id, color: 'darkblue' })));
+        });
+
+        network.on('deselectEdge', function () {
+            nodes.update(nodes.get().map(node => ({ id: node.id, color: 'darkblue' })));
         });
     </script>
 </body>
