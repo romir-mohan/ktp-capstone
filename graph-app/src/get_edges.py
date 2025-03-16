@@ -3,7 +3,7 @@ from itertools import combinations  # Import combinations for pairwise compariso
 
 # Function to read the data from 'data.txt'
 def read_data_from_file():
-    with open('data.txt', 'r') as file:
+    with open('data_short.txt', 'r') as file:
         data = json.load(file)
     return data
 
@@ -56,8 +56,8 @@ def generate_edges():
         if 'name' in user1_info and 'name' in user2_info:
             score, categories = calculate_edge_score(user1_info, user2_info)
 
-            # Only store meaningful edges (score > 0)
-            if score > 0:
+            # Only store meaningful edges (score > 2)
+            if score > 3:
                 edges.append({
                     'member1': user1_info['name'],
                     'member2': user2_info['name'],

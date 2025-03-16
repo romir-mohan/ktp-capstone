@@ -78,22 +78,32 @@
         }
         
         function createNetwork(nodesData, edgesData) {
-            // Create nodes dataset
+            // Create nodes dataset with random positions
             nodes = new vis.DataSet();
             nodesData.forEach((node, index) => {
                 const id = index + 1;
                 nodeMap[node.name] = id; // Map name to ID
+                
+                // Assign very spread out x,y coordinates
+                const angle = 2 * Math.PI * index / nodesData.length;
+                const radius = 1000; // Large radius for spread
+                const x = radius * Math.cos(angle);
+                const y = radius * Math.sin(angle);
+                
                 nodes.add({
                     id: id,
                     label: node.name,
                     title: node.name,
-                    image: node.profile,
+                    image: node.profile || `/api/placeholder/50/50`,
                     shape: 'circularImage',
-                    size: 20,  // Adjust node size
+                    size: 7,  // Larger node size for visibility
                     color: {
                         border: 'darkblue',
                         background: 'darkblue'
-                    }
+                    },
+                    x: x,
+                    y: y,
+                    fixed: true  // Fix the position of nodes
                 });
             });
             
@@ -109,8 +119,8 @@
                         from: fromId,
                         to: toId,
                         score: edge.score,
-                        categories: edge.categories,
-                        width: Math.min(5, edge.score), // Width based on score, capped at 5
+                        categories: edge.categories || ['Unknown'],
+                        width: Math.min(5, edge.score || 1), // Width based on score, capped at 5
                         color: 'darkblue',
                         smooth: false  // Ensure edges are straight lines
                     });
@@ -124,40 +134,53 @@
             const data = { nodes: nodes, edges: edges };
             const options = {
                 physics: {
-                    enabled: false,  // Disable physics for no movement
-                    stabilization: {
-                        iterations: 100,  // Increased iterations for stabilization
-                        updateInterval: 25  // Reduce update interval to make stabilization smoother
-                    },
-                    barnesHut: {
-                        gravitationalConstant: -10000, // Increase for more separation
-                        centralGravity: 0.1,
-                        springLength: 2000,  // Increased for more spacing
-                        springConstant: 0.01  // Lower for less node movement
-                    }
+                    enabled: false  // Completely disable physics
+                },
+                interaction: {
+                    dragNodes: true,  // Allow manual dragging of nodes
+                    dragView: true,   // Allow panning the view
+                    zoomView: true    // Allow zooming
                 },
                 layout: {
-                    improvedLayout: true,
-                    randomSeed: 1 // Ensures the same layout every time
+                    randomSeed: undefined, // Allow truly random positioning
+                    improvedLayout: false  // Disable automated layout improvements
                 },
                 nodes: {
-                    shape: 'dot',
-                    size: 10,
-                    color: 'darkblue'
+                    shape: 'circularImage',
+                    size: 30,
+                    color: {
+                        border: 'darkblue',
+                        background: 'darkblue'
+                    },
+                    font: {
+                        size: 14,
+                        color: '#ffffff'
+                    },
+                    borderWidth: 2,
+                    shadow: true
                 },
                 edges: {
                     color: 'darkblue',
-                    width: 1,
+                    width: 2,
                     smooth: false,  // Ensures edges are straight lines
-                    arrows: '' // Ensure edges remain undirected
+                    arrows: ''      // Ensure edges remain undirected
                 }
             };
             
             network = new vis.Network(container, data, options);
             
-            // Hide loading indicator once the network is stabilized
-            network.on("stabilizationIterationsDone", function () {
+            // Event after initial rendering
+            network.once("afterDrawing", function() {
+                // Hide loading indicator
                 document.getElementById('loadingIndicator').style.display = 'none';
+                
+                // Set zoom level to fit all nodes
+                network.fit({
+                    animation: {
+                        duration: 1000,
+                        easingFunction: 'easeOutQuint'
+                    }
+                });
             });
 
             // Event listeners for node and edge selection
@@ -223,6 +246,16 @@
                 resetColorsToDefault();
                 infoBox.style.display = 'none';
             });
+            
+            // Add double-click event to center the view
+            network.on('doubleClick', function() {
+                network.fit({
+                    animation: {
+                        duration: 1000,
+                        easingFunction: 'easeOutQuint'
+                    }
+                });
+            });
         }
         
         function resetColorsToDefault() {
@@ -242,7 +275,7 @@
                 edges.update({
                     id: edge.id,
                     color: 'darkblue',
-                    width: Math.min(5, edge.score)
+                    width: Math.min(5, edge.score || 1)
                 });
             });
         }
