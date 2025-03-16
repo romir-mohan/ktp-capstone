@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive Graph</title>
+    <style>
+        body {
+            margin: 0;
+            background-color: darkgrey;
+            overflow: hidden;
+        }
+        #network {
+            width: 200vw;
+            height: 200vh;
+        }
+        #infoBox {
+            position: absolute;
+            bottom: 20px;
+            left: 20px;
+            background-color: rgba(0, 0, 0, 0.7);
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            display: none;
+            max-width: 300px;
+        }
+        #loadingIndicator {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: white;
+            background-color: rgba(0, 0, 0, 0.7);
+            padding: 15px;
+            border-radius: 5px;
+        }
+    </style>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/vis/4.21.0/vis.min.js"></script>
+</head>
+<body>
+    <div id="network"></div>
+    <div id="infoBox"></div>
+    <div id="loadingIndicator">Loading data...</div>
+
+    <script type="text/javascript">
+        let nodes, edges, network, allEdges;
+        let nodeMap = {}; // Maps names to node IDs
+
+        async function loadData() {
+            try {
+                document.getElementById('loadingIndicator').style.display = 'block';
+
+                const [nodesResponse, edgesResponse] = await Promise.all([
+                    fetch('graph_nodes.json'),
+                    fetch('graph_edges.json')
+                ]);
+
+                if (!nodesResponse.ok || !edgesResponse.ok) {
+                    throw new Error('Failed to load data');
+                }
+
+                const nodesData = await nodesResponse.json();
+                const edgesData = await edgesResponse.json();
+
+                createNetwork(nodesData, edgesData);
+                
+            } catch (error) {
+                console.error('Error loading data:', error);
+                document.getElementById('loadingIndicator').textContent = 'Error loading data: ' + error.message;
+            }
+        }
+        
+        function createNetwork(nodesData, edgesData) {
+            nodes = new vis.DataSet();
+            nodesData.forEach((node, index) => {
+                const id = index + 1;
+                nodeMap[node.name] = id;
+
+                nodes.add({
+                    id: id,
+                    label: node.name,
+                    title: node.name,
+                    image: node.profile || `/api/placeholder/50/50`,
+                    shape: 'circularImage',
+                    size: 30,
+                    color: {
+                        border: 'darkblue',
+                        background: 'darkblue'
+                    }
+                });
+            });
+
+            allEdges = edgesData.map((edge, index) => {
+                const fromId = nodeMap[edge.member1];
+                const toId = nodeMap[edge.member2];
+
+                if (fromId && toId) {
+                    return {
+                        id: `e${index}`,
+                        from: fromId,
+                        to: toId,
+                        score: edge.score,
+                        categories: edge.categories || ['Unknown'],
+                        color: 'darkblue',
+                        width: 4,  // Default edge width
+                        selectionWidth: 8,  // Increased size when selected
+                        hoverWidth: 8,  // Increased size when hovered
+                        smooth: false
+                    };
+                } else {
+                    console.warn(`Could not find nodes for edge: ${edge.member1} - ${edge.member2}`);
+                    return null;
+                }
+            }).filter(edge => edge !== null);
+
+            edges = new vis.DataSet(); // Start with no visible edges
+
+            const container = document.getElementById('network');
+            const data = { nodes: nodes, edges: edges };
+            const options = {
+                physics: {
+                    enabled: true,
+                    barnesHut: {
+                        gravitationalConstant: -8000,
+                        centralGravity: 0.1,
+                        springLength: 760, // 2x spread of original
+                        springConstant: 0.04,
+                        damping: 0.09,
+                        avoidOverlap: 0.1
+                    }
+                },
+                interaction: {
+                    dragNodes: true,
+                    dragView: true,
+                    zoomView: true
+                },
+                nodes: {
+                    shape: 'circularImage',
+                    size: 30,
+                    color: {
+                        border: 'darkblue',
+                        background: 'darkblue'
+                    },
+                    font: {
+                        size: 30,
+                        color: '#ffffff'
+                    },
+                    borderWidth: 2
+                },
+                edges: {
+                    color: 'darkblue',
+                    width: 4, // Default width
+                    selectionWidth: 8, // Expands when selected
+                    hoverWidth: 8, // Expands when hovered
+                    smooth: false,
+                    arrows: '',
+                    hover: true // Enables hover interactions
+                }
+            };
+
+            network = new vis.Network(container, data, options);
+
+            network.once("afterDrawing", function() {
+                document.getElementById('loadingIndicator').style.display = 'none';
+            });
+
+            setupEventListeners();
+        }
+        
+        function setupEventListeners() {
+            const infoBox = document.getElementById('infoBox');
+
+            network.on('selectNode', function(event) {
+                const nodeId = event.nodes[0];
+                const node = nodes.get(nodeId);
+
+                // Show connected edges
+                const connectedEdges = allEdges.filter(edge => edge.from === nodeId || edge.to === nodeId);
+                edges.clear();
+                edges.add(connectedEdges);
+
+                infoBox.innerHTML = `<strong>${node.label}</strong>`;
+                infoBox.style.display = 'block';
+            });
+
+            network.on('selectEdge', function(event) {
+                const edgeId = event.edges[0];
+                const edge = edges.get(edgeId);
+
+                if (edge) {
+                    const fromNode = nodes.get(edge.from);
+                    const toNode = nodes.get(edge.to);
+
+                    infoBox.innerHTML = `
+                        <strong>Connection:</strong> ${fromNode.label} — ${toNode.label}<br>
+                        <strong>Score:</strong> ${edge.score}<br>
+                        <strong>Categories:</strong> ${edge.categories.join(', ')}
+                    `;
+                    infoBox.style.display = 'block';
+                }
+            });
+
+            network.on('deselectNode', function() {
+                edges.clear(); // Hide edges when no node is selected
+                infoBox.style.display = 'none';
+            });
+
+            network.on('deselectEdge', function() {
+                infoBox.style.display = 'none';
+            });
+        }
+        
+        window.addEventListener('load', loadData);
+    </script>
+</body>
+</html>

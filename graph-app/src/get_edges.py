@@ -3,7 +3,7 @@ from itertools import combinations  # Import combinations for pairwise compariso
 
 # Function to read the data from 'data.txt'
 def read_data_from_file():
-    with open('data_short.txt', 'r') as file:
+    with open('data.txt', 'r') as file:
         data = json.load(file)
     return data
 
