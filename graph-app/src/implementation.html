@@ -1,89 +1,97 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Interactive Graph</title>
-    <style>
-        body {
-            margin: 0;
-            background-color: darkgrey;
-            overflow: hidden;
-        }
-        #network {
-            width: 100vw;
-            height: 100vh;
-        }
-    </style>
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/vis/4.21.0/vis.min.js"></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Interactive Graph</title>
+  <style>
+    body {
+      margin: 0;
+      background-color: darkgrey;
+      overflow: hidden;
+    }
+    #network {
+      width: 100vw;
+      height: 100vh;
+    }
+  </style>
+  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/vis/4.21.0/vis.min.js"></script>
 </head>
 <body>
-    <div id="network"></div>
-    <script type="text/javascript">
-        // Fetch data from Flask server
-        fetch('http://localhost:5000/graph')
-            .then(response => response.json())
-            .then(data => {
-                // Create the nodes and edges DataSet for vis.js
-                var nodes = new vis.DataSet(data.nodes);
-                var edges = new vis.DataSet(data.edges);
+  <div id="network"></div>
+  <script type="text/javascript">
+    // Use Promise.all to fetch the nodes and edges JSON files
+    Promise.all([
+      fetch('graph_nodes.json').then(response => response.json()),
+      fetch('graph_edges.json').then(response => response.json())
+    ])
+    .then(([nodesData, edgesData]) => {
+      // Create the nodes DataSet using the nodesData from graph_nodes.json
+      var nodes = new vis.DataSet(nodesData.map(node => ({
+        id: node.name,       // Use the person's name as the node id
+        label: node.name,    // Caption: the person's name
+        shape: 'image',      // Display an image for the node
+        image: node.profile, // Use the profile image from the JSON link
+        size: node.size || 25
+      })));
 
-                // Create the network
-                var container = document.getElementById('network');
-                var options = {
-                    physics: {
-                        enabled: true,
-                        stabilization: { iterations: 100 }
-                    },
-                    layout: {
-                        improvedLayout: true
-                    },
-                    nodes: {
-                        shape: 'dot',
-                        size: 10,
-                        color: 'darkblue'
-                    },
-                    edges: {
-                        color: 'darkblue',
-                        width: 1,
-                        smooth: false,
-                        arrows: ''  // No arrows for undirected edges
-                    }
-                };
+      // Create the edges DataSet using the edgesData from graph_edges.json
+      var edges = new vis.DataSet(edgesData.map(edge => ({
+        from: edge.member1,
+        to: edge.member2,
+        // Create a label that displays the score and categories
+        label: `Score: ${edge.score}, Categories: ${edge.categories.join(', ')}`,
+        font: { align: "middle", size: 14, color: "white" },
+        color: { color: 'darkblue' }
+      })));
 
-                var network = new vis.Network(container, { nodes: nodes, edges: edges }, options);
+      // Create the network visualization
+      var container = document.getElementById('network');
+      var options = {
+        physics: { enabled: true, stabilization: { iterations: 100 } },
+        layout: { improvedLayout: true },
+        nodes: { shape: 'dot', size: 10, color: 'darkblue' },
+        edges: { width: 1, smooth: false, arrows: "" } // Undirected edges (no arrows)
+      };
 
-                // Event handler for node selection
-                network.on('selectNode', function (event) {
-                    var nodeId = event.nodes[0];
-                    var connectedEdges = edges.get({
-                        filter: function (edge) {
-                            return edge.from === nodeId || edge.to === nodeId;
-                        }
-                    });
+      var network = new vis.Network(container, { nodes: nodes, edges: edges }, options);
 
-                    // Reset all nodes and edges to dark blue
-                    nodes.update(nodes.get().map(node => ({ id: node.id, color: 'darkblue' })));
-                    edges.update(edges.get().map(edge => ({ id: edge.id, color: 'darkblue' })));
+      // Event handler for node selection to highlight the node and its connected edges
+      network.on('selectNode', function (event) {
+        var nodeId = event.nodes[0];
+        var connectedEdges = edges.get({
+          filter: function (edge) {
+            return edge.from === nodeId || edge.to === nodeId;
+          }
+        });
 
-                    // Highlight the selected node in white
-                    nodes.update({ id: nodeId, color: 'white' });
+        // Reset colors to default
+        nodes.update(nodes.get().map(node => ({ id: node.id, color: 'darkblue' })));
+        edges.update(edges.get().map(edge => ({ id: edge.id, color: 'darkblue' })));
 
-                    // Change all edges connected to the node to white
-                    connectedEdges.forEach(edge => {
-                        edges.update({ id: edge.id, color: 'white' });
-                    });
-                });
+        // Highlight the selected node
+        nodes.update({ id: nodeId, color: 'white' });
 
-                // Reset colors when no node is selected
-                network.on('deselectNode', function () {
-                    nodes.update(nodes.get().map(node => ({ id: node.id, color: 'darkblue' })));
-                    edges.update(edges.get().map(edge => ({ id: edge.id, color: 'darkblue' })));
-                });
-            })
-            .catch(error => {
-                console.error("Error fetching data: ", error);
-            });
-    </script>
+        // Highlight the edges connected to the selected node
+        connectedEdges.forEach(edge => {
+          edges.update({ id: edge.id, color: 'white' });
+        });
+      });
+
+      // Event handler for edge selection: display connection details in an alert
+      network.on('selectEdge', function (event) {
+        var edgeId = event.edges[0];
+        var edge = edges.get(edgeId);
+        alert(`Connection between ${edge.from} and ${edge.to}\n${edge.label}`);
+      });
+
+      // Reset colors when no node is selected
+      network.on('deselectNode', function () {
+        nodes.update(nodes.get().map(node => ({ id: node.id, color: 'darkblue' })));
+        edges.update(edges.get().map(edge => ({ id: edge.id, color: 'darkblue' })));
+      });
+    })
+    .catch(error => console.error("Error fetching graph data: ", error));
+  </script>
 </body>
 </html>
