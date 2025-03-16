@@ -20,37 +20,15 @@
 <body>
     <div id="network"></div>
     <script type="text/javascript">
-        // Fetch the graph data from the Flask API
-        fetch('/graph')
+        // Fetch data from Flask server
+        fetch('http://localhost:5000/graph')
             .then(response => response.json())
             .then(data => {
-                var nodes = new vis.DataSet();
-                var edges = new vis.DataSet();
+                // Create the nodes and edges DataSet for vis.js
+                var nodes = new vis.DataSet(data.nodes);
+                var edges = new vis.DataSet(data.edges);
 
-                // Add nodes
-                data.nodes.forEach(node => {
-                    nodes.add({
-                        id: node.id,  // Use student's name as the node id
-                        label: node.label,  // Label with the student's name
-                        title: node.title,  // Tooltip with the 'about' field or description
-                        image: node.image,  // Profile image if available
-                        shape: node.shape,  // Shape is 'image'
-                        size: node.size,  // Adjust size as needed
-                        color: node.color || 'darkblue'  // Default color as darkblue
-                    });
-                });
-
-                // Add edges
-                data.edges.forEach(edge => {
-                    edges.add({
-                        from: edge.from,  // Node name (student)
-                        to: edge.to,  // Node name (student)
-                        color: edge.color || 'darkblue',  // Default edge color
-                        arrows: edge.arrows || ''  // No arrows for undirected edges
-                    });
-                });
-
-                // Set up the container for the network visualization
+                // Create the network
                 var container = document.getElementById('network');
                 var options = {
                     physics: {
@@ -61,25 +39,23 @@
                         improvedLayout: true
                     },
                     nodes: {
-                        shape: 'dot',  // Use 'dot' shape for nodes
-                        size: 10,  // Default size
+                        shape: 'dot',
+                        size: 10,
                         color: 'darkblue'
                     },
                     edges: {
                         color: 'darkblue',
                         width: 1,
                         smooth: false,
-                        arrows: ''  // Ensure edges remain undirected
+                        arrows: ''  // No arrows for undirected edges
                     }
                 };
 
                 var network = new vis.Network(container, { nodes: nodes, edges: edges }, options);
 
-                // Node selection behavior
+                // Event handler for node selection
                 network.on('selectNode', function (event) {
                     var nodeId = event.nodes[0];
-
-                    // Get all edges connected to the selected node
                     var connectedEdges = edges.get({
                         filter: function (edge) {
                             return edge.from === nodeId || edge.to === nodeId;
@@ -93,7 +69,7 @@
                     // Highlight the selected node in white
                     nodes.update({ id: nodeId, color: 'white' });
 
-                    // Highlight all edges connected to the selected node
+                    // Change all edges connected to the node to white
                     connectedEdges.forEach(edge => {
                         edges.update({ id: edge.id, color: 'white' });
                     });
@@ -105,7 +81,9 @@
                     edges.update(edges.get().map(edge => ({ id: edge.id, color: 'darkblue' })));
                 });
             })
-            .catch(error => console.error('Error fetching graph data:', error));
+            .catch(error => {
+                console.error("Error fetching data: ", error);
+            });
     </script>
 </body>
 </html>
