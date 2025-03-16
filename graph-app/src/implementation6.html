@@ -135,10 +135,10 @@
                     barnesHut: {
                         gravitationalConstant: -2000,  // Adjust attraction/repulsion
                         centralGravity: 0.3,
-                        springLength: 95,
+                        springLength: 200,
                         springConstant: 0.04,
                         damping: 0.09,
-                        avoidOverlap: 0.1
+                        avoidOverlap: 1.0
                     }
                 },
                 interaction: {
@@ -216,8 +216,8 @@
                 edges.update({ id: edgeId, color: 'darkblue', width: Math.min(5, edge.score) + 2 });
                 
                 // Highlight connected nodes
-                nodes.update({ id: edge.from, color: { border: 'white', background: 'white' } });
-                nodes.update({ id: edge.to, color: { border: 'white', background: 'white' } });
+                nodes.update({ id: edge.from, color: { border: 'darkblue', background: 'darkblue' } });
+                nodes.update({ id: edge.to, color: { border: 'darkblue', background: 'darkblue' } });
                 
                 // Display edge info
                 const fromNode = nodes.get(edge.from);
