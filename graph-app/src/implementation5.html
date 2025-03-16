@@ -77,15 +77,11 @@
         }
         
         function createNetwork(nodesData, edgesData) {
-            // Create nodes dataset with random positions
+            // Create nodes dataset
             nodes = new vis.DataSet();
             nodesData.forEach((node, index) => {
                 const id = index + 1;
                 nodeMap[node.name] = id; // Map name to ID
-                
-                // Randomly assign x, y coordinates within a large area
-                const x = Math.random() * 4000 - 2000; // Random x between -2000 and 2000
-                const y = Math.random() * 4000 - 2000; // Random y between -2000 and 2000
                 
                 nodes.add({
                     id: id,
@@ -97,18 +93,15 @@
                     color: {
                         border: 'darkblue',
                         background: 'darkblue'
-                    },
-                    x: x,
-                    y: y,
-                    fixed: true  // Allow nodes to move freely (no fixed position)
+                    }
                 });
             });
             
             // Create edges dataset
             edges = new vis.DataSet();
             edgesData.forEach((edge, index) => {
-                const fromId = nodeMap[edge.member1, edge.member2];
-                const toId = nodeMap[edge.member2, edge.member1];
+                const fromId = nodeMap[edge.member1];
+                const toId = nodeMap[edge.member2];
                 
                 if (fromId && toId) {
                     edges.add({
@@ -130,31 +123,42 @@
             const data = { nodes: nodes, edges: edges };
             const options = {
                 physics: {
-                    enabled: true,
-                    stabilization: { iterations: 100 }  // Allow stabilization for random positions
+                    enabled: true,  // Enable physics for force-directed layout
+                    stabilization: {
+                        enabled: true,
+                        iterations: 1000,  // Number of iterations for stabilization
+                        updateInterval: 50,
+                        onlyDynamicEdges: false,
+                        fit: true
+                    },
+                    barnesHut: {
+                        gravitationalConstant: -2000,  // Adjust attraction/repulsion
+                        centralGravity: 0.3,
+                        springLength: 95,
+                        springConstant: 0.04,
+                        damping: 0.09,
+                        avoidOverlap: 0.1
+                    }
                 },
                 interaction: {
                     dragNodes: true,  // Allow manual dragging of nodes
                     dragView: true,   // Allow panning the view
                     zoomView: true    // Allow zooming
                 },
-                layout: {
-                    improvedLayout: false  // Disable automatic layout
-                },
                 nodes: {
                     shape: 'circularImage',
-                    size: 40,
+                    size: 30,
                     color: {
                         border: 'darkblue',
                         background: 'darkblue'
                     },
                     font: {
-                        size: 14,
+                        size: 30,
                         color: '#ffffff',
-                        face: "Serif"
+                        face: "black"
                     },
                     borderWidth: 2,
-                    shadow: true
+                    shadow: false
                 },
                 edges: {
                     color: 'darkblue',
@@ -170,9 +174,6 @@
             network.once("afterDrawing", function() {
                 // Hide loading indicator
                 document.getElementById('loadingIndicator').style.display = 'none';
-                
-                // Set zoom level to fit all nodes
-                
             });
 
             // Event listeners for node and edge selection
