@@ -197,7 +197,7 @@
                 // Get connected edges and show them
                 const connectedEdges = network.getConnectedEdges(nodeId);
                 connectedEdges.forEach(edgeId => {
-                    edges.update({ id: edgeId, hidden: false, color: 'white' });
+                    edges.update({ id: edgeId, hidden: false, color: 'darkblue' });
                 });
                 
                 // Display node info
@@ -213,7 +213,7 @@
                 resetColorsToDefault();
                 
                 // Highlight the edge
-                edges.update({ id: edgeId, color: 'white', width: Math.min(5, edge.score) + 2 });
+                edges.update({ id: edgeId, color: 'darkblue', width: Math.min(5, edge.score) + 2 });
                 
                 // Highlight connected nodes
                 nodes.update({ id: edge.from, color: { border: 'white', background: 'white' } });
