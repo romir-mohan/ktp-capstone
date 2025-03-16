@@ -1,0 +1,4 @@
+[
+    { "member1": "John Doe", "member2": "Jane Smith", "score": 0.9, "categories": ["Math", "Science"] },
+    { "member1": "John Doe", "member2": "Alice Johnson", "score": 0.7, "categories": ["Math", "History"] }
+]

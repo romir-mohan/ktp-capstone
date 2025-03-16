@@ -3,48 +3,252 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Basic Node Graph</title>
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/vis/4.21.0/vis.min.js"></script>
+    <title>Interactive Graph</title>
     <style>
         body {
             margin: 0;
             background-color: darkgrey;
             overflow: hidden;
+            font-family: Arial, sans-serif;
         }
         #network {
             width: 100vw;
             height: 100vh;
         }
+        #infoBox {
+            position: absolute;
+            bottom: 20px;
+            left: 20px;
+            background-color: rgba(0, 0, 0, 0.7);
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            display: none;
+            max-width: 300px;
+        }
+        #loadingIndicator {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: white;
+            background-color: rgba(0, 0, 0, 0.7);
+            padding: 15px;
+            border-radius: 5px;
+        }
     </style>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/vis/4.21.0/vis.min.js"></script>
 </head>
 <body>
     <div id="network"></div>
-
+    <div id="infoBox"></div>
+    <div id="loadingIndicator">Loading data...</div>
+    
     <script type="text/javascript">
-        // Load nodes from graph_nodes.json
-        fetch('graph_nodes.json')
-            .then(response => response.json())
-            .then(nodesData => {
-                // Create nodes dataset
-                var nodes = new vis.DataSet(nodesData.map(node => ({
-                    id: node.name,   // Node identifier
-                    label: node.name // Display name as label
-                })));
+        // Initialize network variables
+        let nodes, edges, network;
+        let nodeMap = {}; // Maps names to node IDs
 
-                // Create the network visualization (only nodes for now)
-                var container = document.getElementById('network');
-                var data = { nodes: nodes };
-                var options = {
-                    nodes: {
-                        shape: 'dot',
-                        size: 20,
-                        color: 'darkblue'
+        // Load data from JSON files
+        async function loadData() {
+            try {
+                // Show loading indicator
+                document.getElementById('loadingIndicator').style.display = 'block';
+
+                // Fetch nodes and edges data from JSON files
+                const [nodesResponse, edgesResponse] = await Promise.all([ 
+                    fetch('graph_nodes.json'),
+                    fetch('graph_edges.json')
+                ]);
+
+                if (!nodesResponse.ok || !edgesResponse.ok) {
+                    throw new Error('Failed to load data');
+                }
+
+                const nodesData = await nodesResponse.json();
+                const edgesData = await edgesResponse.json();
+
+                // Process the data and create the network
+                createNetwork(nodesData, edgesData);
+                
+            } catch (error) {
+                console.error('Error loading data:', error);
+                document.getElementById('loadingIndicator').textContent = 'Error loading data: ' + error.message;
+            }
+        }
+        
+        function createNetwork(nodesData, edgesData) {
+            // Create nodes dataset
+            nodes = new vis.DataSet();
+            nodesData.forEach((node, index) => {
+                const id = index + 1;
+                nodeMap[node.name] = id; // Map name to ID
+                nodes.add({
+                    id: id,
+                    label: node.name,
+                    title: node.name,
+                    image: node.profile,
+                    shape: 'circularImage',
+                    size: 20,  // Adjust node size
+                    color: {
+                        border: 'darkblue',
+                        background: 'darkblue'
                     }
-                };
+                });
+            });
+            
+            // Create edges dataset
+            edges = new vis.DataSet();
+            edgesData.forEach((edge, index) => {
+                const fromId = nodeMap[edge.member1];
+                const toId = nodeMap[edge.member2];
+                
+                if (fromId && toId) {
+                    edges.add({
+                        id: `e${index}`,
+                        from: fromId,
+                        to: toId,
+                        score: edge.score,
+                        categories: edge.categories,
+                        width: Math.min(5, edge.score), // Width based on score, capped at 5
+                        color: 'darkblue',
+                        smooth: false  // Ensure edges are straight lines
+                    });
+                } else {
+                    console.warn(`Could not find nodes for edge: ${edge.member1} - ${edge.member2}`);
+                }
+            });
+            
+            // Create the network
+            const container = document.getElementById('network');
+            const data = { nodes: nodes, edges: edges };
+            const options = {
+                physics: {
+                    enabled: false,  // Disable physics for no movement
+                    stabilization: {
+                        iterations: 100,  // Increased iterations for stabilization
+                        updateInterval: 25  // Reduce update interval to make stabilization smoother
+                    },
+                    barnesHut: {
+                        gravitationalConstant: -10000, // Increase for more separation
+                        centralGravity: 0.1,
+                        springLength: 2000,  // Increased for more spacing
+                        springConstant: 0.01  // Lower for less node movement
+                    }
+                },
+                layout: {
+                    improvedLayout: true,
+                    randomSeed: 1 // Ensures the same layout every time
+                },
+                nodes: {
+                    shape: 'dot',
+                    size: 10,
+                    color: 'darkblue'
+                },
+                edges: {
+                    color: 'darkblue',
+                    width: 1,
+                    smooth: false,  // Ensures edges are straight lines
+                    arrows: '' // Ensure edges remain undirected
+                }
+            };
+            
+            network = new vis.Network(container, data, options);
+            
+            // Hide loading indicator once the network is stabilized
+            network.on("stabilizationIterationsDone", function () {
+                document.getElementById('loadingIndicator').style.display = 'none';
+            });
 
-                var network = new vis.Network(container, data, options);
-            })
-            .catch(error => console.error("Error loading nodes: ", error));
+            // Event listeners for node and edge selection
+            setupEventListeners();
+        }
+        
+        function setupEventListeners() {
+            const infoBox = document.getElementById('infoBox');
+            
+            network.on('selectNode', function(event) {
+                const nodeId = event.nodes[0];
+                const node = nodes.get(nodeId);
+                
+                // Reset all nodes and edges to original colors
+                resetColorsToDefault();
+                
+                // Highlight the selected node
+                nodes.update({ id: nodeId, color: { border: 'white', background: 'white' } });
+                
+                // Get connected edges and highlight them
+                const connectedEdges = network.getConnectedEdges(nodeId);
+                connectedEdges.forEach(edgeId => {
+                    edges.update({ id: edgeId, color: 'white' });
+                });
+                
+                // Display node info
+                infoBox.innerHTML = `<strong>${node.label}</strong>`;
+                infoBox.style.display = 'block';
+            });
+            
+            network.on('selectEdge', function(event) {
+                const edgeId = event.edges[0];
+                const edge = edges.get(edgeId);
+                
+                // Reset all to default
+                resetColorsToDefault();
+                
+                // Highlight the edge
+                edges.update({ id: edgeId, color: 'white', width: Math.min(5, edge.score) + 2 });
+                
+                // Highlight connected nodes
+                nodes.update({ id: edge.from, color: { border: 'white', background: 'white' } });
+                nodes.update({ id: edge.to, color: { border: 'white', background: 'white' } });
+                
+                // Display edge info
+                const fromNode = nodes.get(edge.from);
+                const toNode = nodes.get(edge.to);
+                
+                infoBox.innerHTML = `
+                    <strong>Connection:</strong> ${fromNode.label} — ${toNode.label}<br>
+                    <strong>Score:</strong> ${edge.score}<br>
+                    <strong>Categories:</strong> ${edge.categories.join(', ')}
+                `;
+                infoBox.style.display = 'block';
+            });
+            
+            network.on('deselectNode', function() {
+                resetColorsToDefault();
+                infoBox.style.display = 'none';
+            });
+            
+            network.on('deselectEdge', function() {
+                resetColorsToDefault();
+                infoBox.style.display = 'none';
+            });
+        }
+        
+        function resetColorsToDefault() {
+            // Reset node colors
+            nodes.get().forEach(node => {
+                nodes.update({
+                    id: node.id,
+                    color: {
+                        border: 'darkblue',
+                        background: 'darkblue'
+                    }
+                });
+            });
+            
+            // Reset edge colors
+            edges.get().forEach(edge => {
+                edges.update({
+                    id: edge.id,
+                    color: 'darkblue',
+                    width: Math.min(5, edge.score)
+                });
+            });
+        }
+        
+        // Load data when the page loads
+        window.addEventListener('load', loadData);
     </script>
 </body>
 </html>
