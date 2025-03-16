@@ -1,5 +1,285 @@
 [
     {
+        "member1": "Dhruv Saoji",
+        "member2": "Nicholas Perry",
+        "score": 2,
+        "categories": [
+            "major"
+        ]
+    },
+    {
+        "member1": "Dhruv Saoji",
+        "member2": "Vikram Srikishan",
+        "score": 2,
+        "categories": [
+            "major"
+        ]
+    },
+    {
+        "member1": "Dhruv Saoji",
+        "member2": "Michael Hernandez-Thomas",
+        "score": 2,
+        "categories": [
+            "major"
+        ]
+    },
+    {
+        "member1": "Dhruv Saoji",
+        "member2": "Alex Feng",
+        "score": 2,
+        "categories": [
+            "major"
+        ]
+    },
+    {
+        "member1": "Dhruv Saoji",
+        "member2": "Cyrus Nadizadeh",
+        "score": 3,
+        "categories": [
+            "year",
+            "major"
+        ]
+    },
+    {
+        "member1": "Dhruv Saoji",
+        "member2": "Benjamin Isaac",
+        "score": 2,
+        "categories": [
+            "major"
+        ]
+    },
+    {
+        "member1": "Dhruv Saoji",
+        "member2": "Mia Cheng",
+        "score": 2,
+        "categories": [
+            "major"
+        ]
+    },
+    {
+        "member1": "Dhruv Saoji",
+        "member2": "Leilani Kulkarni",
+        "score": 3,
+        "categories": [
+            "year",
+            "major"
+        ]
+    },
+    {
+        "member1": "Dhruv Saoji",
+        "member2": "Finn McMillan",
+        "score": 2,
+        "categories": [
+            "major"
+        ]
+    },
+    {
+        "member1": "Nicholas Perry",
+        "member2": "Vikram Srikishan",
+        "score": 2,
+        "categories": [
+            "major"
+        ]
+    },
+    {
+        "member1": "Nicholas Perry",
+        "member2": "Michael Hernandez-Thomas",
+        "score": 3,
+        "categories": [
+            "year",
+            "major"
+        ]
+    },
+    {
+        "member1": "Nicholas Perry",
+        "member2": "Alex Feng",
+        "score": 2,
+        "categories": [
+            "major"
+        ]
+    },
+    {
+        "member1": "Nicholas Perry",
+        "member2": "Cyrus Nadizadeh",
+        "score": 2,
+        "categories": [
+            "major"
+        ]
+    },
+    {
+        "member1": "Nicholas Perry",
+        "member2": "Benjamin Isaac",
+        "score": 2,
+        "categories": [
+            "major"
+        ]
+    },
+    {
+        "member1": "Nicholas Perry",
+        "member2": "Mia Cheng",
+        "score": 3,
+        "categories": [
+            "year",
+            "major"
+        ]
+    },
+    {
+        "member1": "Nicholas Perry",
+        "member2": "Leilani Kulkarni",
+        "score": 2,
+        "categories": [
+            "major"
+        ]
+    },
+    {
+        "member1": "Nicholas Perry",
+        "member2": "Finn McMillan",
+        "score": 2,
+        "categories": [
+            "major"
+        ]
+    },
+    {
+        "member1": "Andre Tsai",
+        "member2": "Rachel Li",
+        "score": 2,
+        "categories": [
+            "major"
+        ]
+    },
+    {
+        "member1": "Andre Tsai",
+        "member2": "Damien Koh",
+        "score": 2,
+        "categories": [
+            "major"
+        ]
+    },
+    {
+        "member1": "Vikram Srikishan",
+        "member2": "Michael Hernandez-Thomas",
+        "score": 2,
+        "categories": [
+            "major"
+        ]
+    },
+    {
+        "member1": "Vikram Srikishan",
+        "member2": "Alex Feng",
+        "score": 2,
+        "categories": [
+            "major"
+        ]
+    },
+    {
+        "member1": "Vikram Srikishan",
+        "member2": "Cyrus Nadizadeh",
+        "score": 2,
+        "categories": [
+            "major"
+        ]
+    },
+    {
+        "member1": "Vikram Srikishan",
+        "member2": "Benjamin Isaac",
+        "score": 2,
+        "categories": [
+            "major"
+        ]
+    },
+    {
+        "member1": "Vikram Srikishan",
+        "member2": "Mia Cheng",
+        "score": 2,
+        "categories": [
+            "major"
+        ]
+    },
+    {
+        "member1": "Vikram Srikishan",
+        "member2": "Leilani Kulkarni",
+        "score": 2,
+        "categories": [
+            "major"
+        ]
+    },
+    {
+        "member1": "Vikram Srikishan",
+        "member2": "Finn McMillan",
+        "score": 2,
+        "categories": [
+            "major"
+        ]
+    },
+    {
+        "member1": "Blake Hu",
+        "member2": "Josh Prunty",
+        "score": 2,
+        "categories": [
+            "major"
+        ]
+    },
+    {
+        "member1": "Blake Hu",
+        "member2": "Joseph Shim",
+        "score": 3,
+        "categories": [
+            "year",
+            "major"
+        ]
+    },
+    {
+        "member1": "Blake Hu",
+        "member2": "Alex Shen",
+        "score": 3,
+        "categories": [
+            "year",
+            "major"
+        ]
+    },
+    {
+        "member1": "Blake Hu",
+        "member2": "Nicole Liu ",
+        "score": 3,
+        "categories": [
+            "year",
+            "major"
+        ]
+    },
+    {
+        "member1": "Gavin Chung",
+        "member2": "Trayi Sharma",
+        "score": 2,
+        "categories": [
+            "major"
+        ]
+    },
+    {
+        "member1": "Gavin Chung",
+        "member2": "Jonathan Chan",
+        "score": 3,
+        "categories": [
+            "year",
+            "major"
+        ]
+    },
+    {
+        "member1": "Gavin Chung",
+        "member2": "Jordan Chu",
+        "score": 3,
+        "categories": [
+            "exec"
+        ]
+    },
+    {
+        "member1": "Gavin Chung",
+        "member2": "Nicole Liu ",
+        "score": 3,
+        "categories": [
+            "exec"
+        ]
+    },
+    {
         "member1": "Gavin Chung",
         "member2": "Zacaria Bahojb Nouri",
         "score": 4,
@@ -9,11 +289,124 @@
         ]
     },
     {
+        "member1": "Gavin Chung",
+        "member2": "Nico Biabani",
+        "score": 3,
+        "categories": [
+            "exec"
+        ]
+    },
+    {
+        "member1": "Michael Hernandez-Thomas",
+        "member2": "Alex Feng",
+        "score": 2,
+        "categories": [
+            "major"
+        ]
+    },
+    {
+        "member1": "Michael Hernandez-Thomas",
+        "member2": "Cyrus Nadizadeh",
+        "score": 2,
+        "categories": [
+            "major"
+        ]
+    },
+    {
+        "member1": "Michael Hernandez-Thomas",
+        "member2": "Benjamin Isaac",
+        "score": 2,
+        "categories": [
+            "major"
+        ]
+    },
+    {
+        "member1": "Michael Hernandez-Thomas",
+        "member2": "Mia Cheng",
+        "score": 3,
+        "categories": [
+            "year",
+            "major"
+        ]
+    },
+    {
+        "member1": "Michael Hernandez-Thomas",
+        "member2": "Leilani Kulkarni",
+        "score": 2,
+        "categories": [
+            "major"
+        ]
+    },
+    {
         "member1": "Michael Hernandez-Thomas",
         "member2": "Isaac Winoto",
         "score": 4,
         "categories": [
             "internship"
+        ]
+    },
+    {
+        "member1": "Michael Hernandez-Thomas",
+        "member2": "Finn McMillan",
+        "score": 2,
+        "categories": [
+            "major"
+        ]
+    },
+    {
+        "member1": "Tatum Thomas",
+        "member2": "Jordan Chu",
+        "score": 2,
+        "categories": [
+            "major"
+        ]
+    },
+    {
+        "member1": "Tatum Thomas",
+        "member2": "Amelia Hasting",
+        "score": 2,
+        "categories": [
+            "major"
+        ]
+    },
+    {
+        "member1": "Alex Feng",
+        "member2": "Cyrus Nadizadeh",
+        "score": 2,
+        "categories": [
+            "major"
+        ]
+    },
+    {
+        "member1": "Alex Feng",
+        "member2": "Benjamin Isaac",
+        "score": 2,
+        "categories": [
+            "major"
+        ]
+    },
+    {
+        "member1": "Alex Feng",
+        "member2": "Mia Cheng",
+        "score": 2,
+        "categories": [
+            "major"
+        ]
+    },
+    {
+        "member1": "Alex Feng",
+        "member2": "Leilani Kulkarni",
+        "score": 2,
+        "categories": [
+            "major"
+        ]
+    },
+    {
+        "member1": "Alex Feng",
+        "member2": "Finn McMillan",
+        "score": 2,
+        "categories": [
+            "major"
         ]
     },
     {
@@ -36,6 +429,14 @@
     },
     {
         "member1": "Daniela Aves",
+        "member2": "Benjamin Isaac",
+        "score": 3,
+        "categories": [
+            "pledge"
+        ]
+    },
+    {
+        "member1": "Daniela Aves",
         "member2": "Trayi Sharma",
         "score": 4,
         "categories": [
@@ -49,6 +450,14 @@
         "score": 4,
         "categories": [
             "year",
+            "pledge"
+        ]
+    },
+    {
+        "member1": "Daniela Aves",
+        "member2": "Arthur Zakrzewski",
+        "score": 3,
+        "categories": [
             "pledge"
         ]
     },
@@ -77,6 +486,62 @@
         "categories": [
             "year",
             "pledge"
+        ]
+    },
+    {
+        "member1": "Daniela Aves",
+        "member2": "Rishi Garg",
+        "score": 3,
+        "categories": [
+            "pledge"
+        ]
+    },
+    {
+        "member1": "Daniela Aves",
+        "member2": "Kelly Meng",
+        "score": 2,
+        "categories": [
+            "major"
+        ]
+    },
+    {
+        "member1": "Daniela Aves",
+        "member2": "Finn McMillan",
+        "score": 3,
+        "categories": [
+            "pledge"
+        ]
+    },
+    {
+        "member1": "Daniela Aves",
+        "member2": "Shervin Naini",
+        "score": 3,
+        "categories": [
+            "pledge"
+        ]
+    },
+    {
+        "member1": "Josh Prunty",
+        "member2": "Joseph Shim",
+        "score": 2,
+        "categories": [
+            "major"
+        ]
+    },
+    {
+        "member1": "Josh Prunty",
+        "member2": "Alex Shen",
+        "score": 2,
+        "categories": [
+            "major"
+        ]
+    },
+    {
+        "member1": "Josh Prunty",
+        "member2": "Nicole Liu ",
+        "score": 2,
+        "categories": [
+            "major"
         ]
     },
     {
@@ -90,6 +555,14 @@
     },
     {
         "member1": "Abigail Anton",
+        "member2": "Benjamin Isaac",
+        "score": 3,
+        "categories": [
+            "pledge"
+        ]
+    },
+    {
+        "member1": "Abigail Anton",
         "member2": "Trayi Sharma",
         "score": 4,
         "categories": [
@@ -103,6 +576,14 @@
         "score": 4,
         "categories": [
             "year",
+            "pledge"
+        ]
+    },
+    {
+        "member1": "Abigail Anton",
+        "member2": "Arthur Zakrzewski",
+        "score": 3,
+        "categories": [
             "pledge"
         ]
     },
@@ -131,6 +612,48 @@
         "categories": [
             "year",
             "pledge"
+        ]
+    },
+    {
+        "member1": "Abigail Anton",
+        "member2": "Rishi Garg",
+        "score": 3,
+        "categories": [
+            "pledge"
+        ]
+    },
+    {
+        "member1": "Abigail Anton",
+        "member2": "Finn McMillan",
+        "score": 3,
+        "categories": [
+            "pledge"
+        ]
+    },
+    {
+        "member1": "Abigail Anton",
+        "member2": "Shervin Naini",
+        "score": 3,
+        "categories": [
+            "pledge"
+        ]
+    },
+    {
+        "member1": "Joseph Shim",
+        "member2": "Alex Shen",
+        "score": 3,
+        "categories": [
+            "year",
+            "major"
+        ]
+    },
+    {
+        "member1": "Joseph Shim",
+        "member2": "Nicole Liu ",
+        "score": 3,
+        "categories": [
+            "year",
+            "major"
         ]
     },
     {
@@ -162,6 +685,22 @@
     },
     {
         "member1": "Cyrus Nadizadeh",
+        "member2": "Mia Cheng",
+        "score": 2,
+        "categories": [
+            "major"
+        ]
+    },
+    {
+        "member1": "Cyrus Nadizadeh",
+        "member2": "Arthur Zakrzewski",
+        "score": 3,
+        "categories": [
+            "pledge"
+        ]
+    },
+    {
+        "member1": "Cyrus Nadizadeh",
         "member2": "Leilani Kulkarni",
         "score": 6,
         "categories": [
@@ -190,11 +729,51 @@
     },
     {
         "member1": "Cyrus Nadizadeh",
+        "member2": "Rishi Garg",
+        "score": 3,
+        "categories": [
+            "pledge"
+        ]
+    },
+    {
+        "member1": "Cyrus Nadizadeh",
         "member2": "Finn McMillan",
         "score": 5,
         "categories": [
             "major",
             "pledge"
+        ]
+    },
+    {
+        "member1": "Cyrus Nadizadeh",
+        "member2": "Shervin Naini",
+        "score": 3,
+        "categories": [
+            "pledge"
+        ]
+    },
+    {
+        "member1": "Benjamin Isaac",
+        "member2": "Trayi Sharma",
+        "score": 3,
+        "categories": [
+            "pledge"
+        ]
+    },
+    {
+        "member1": "Benjamin Isaac",
+        "member2": "Rachel Li",
+        "score": 3,
+        "categories": [
+            "pledge"
+        ]
+    },
+    {
+        "member1": "Benjamin Isaac",
+        "member2": "Mia Cheng",
+        "score": 2,
+        "categories": [
+            "major"
         ]
     },
     {
@@ -212,6 +791,22 @@
         "score": 5,
         "categories": [
             "major",
+            "pledge"
+        ]
+    },
+    {
+        "member1": "Benjamin Isaac",
+        "member2": "Lauren Tan",
+        "score": 3,
+        "categories": [
+            "pledge"
+        ]
+    },
+    {
+        "member1": "Benjamin Isaac",
+        "member2": "Muhammad Tahir",
+        "score": 3,
+        "categories": [
             "pledge"
         ]
     },
@@ -254,6 +849,22 @@
     },
     {
         "member1": "Trayi Sharma",
+        "member2": "Jonathan Chan",
+        "score": 2,
+        "categories": [
+            "major"
+        ]
+    },
+    {
+        "member1": "Trayi Sharma",
+        "member2": "Arthur Zakrzewski",
+        "score": 3,
+        "categories": [
+            "pledge"
+        ]
+    },
+    {
+        "member1": "Trayi Sharma",
         "member2": "Leilani Kulkarni",
         "score": 4,
         "categories": [
@@ -280,6 +891,54 @@
         ]
     },
     {
+        "member1": "Trayi Sharma",
+        "member2": "Rishi Garg",
+        "score": 3,
+        "categories": [
+            "pledge"
+        ]
+    },
+    {
+        "member1": "Trayi Sharma",
+        "member2": "Finn McMillan",
+        "score": 3,
+        "categories": [
+            "pledge"
+        ]
+    },
+    {
+        "member1": "Trayi Sharma",
+        "member2": "Shervin Naini",
+        "score": 3,
+        "categories": [
+            "pledge"
+        ]
+    },
+    {
+        "member1": "David Sotir",
+        "member2": "Natalie Hong",
+        "score": 2,
+        "categories": [
+            "major"
+        ]
+    },
+    {
+        "member1": "Rachel Li",
+        "member2": "Damien Koh",
+        "score": 2,
+        "categories": [
+            "major"
+        ]
+    },
+    {
+        "member1": "Rachel Li",
+        "member2": "Arthur Zakrzewski",
+        "score": 3,
+        "categories": [
+            "pledge"
+        ]
+    },
+    {
         "member1": "Rachel Li",
         "member2": "Leilani Kulkarni",
         "score": 4,
@@ -303,6 +962,87 @@
         "score": 4,
         "categories": [
             "year",
+            "pledge"
+        ]
+    },
+    {
+        "member1": "Rachel Li",
+        "member2": "Rishi Garg",
+        "score": 3,
+        "categories": [
+            "pledge"
+        ]
+    },
+    {
+        "member1": "Rachel Li",
+        "member2": "Finn McMillan",
+        "score": 3,
+        "categories": [
+            "pledge"
+        ]
+    },
+    {
+        "member1": "Rachel Li",
+        "member2": "Shervin Naini",
+        "score": 3,
+        "categories": [
+            "pledge"
+        ]
+    },
+    {
+        "member1": "Mia Cheng",
+        "member2": "Leilani Kulkarni",
+        "score": 2,
+        "categories": [
+            "major"
+        ]
+    },
+    {
+        "member1": "Mia Cheng",
+        "member2": "Finn McMillan",
+        "score": 2,
+        "categories": [
+            "major"
+        ]
+    },
+    {
+        "member1": "Alex Shen",
+        "member2": "Nicole Liu ",
+        "score": 3,
+        "categories": [
+            "year",
+            "major"
+        ]
+    },
+    {
+        "member1": "Christian Fikre",
+        "member2": "Anitej Siluveru",
+        "score": 2,
+        "categories": [
+            "major"
+        ]
+    },
+    {
+        "member1": "Arthur Zakrzewski",
+        "member2": "Leilani Kulkarni",
+        "score": 3,
+        "categories": [
+            "pledge"
+        ]
+    },
+    {
+        "member1": "Arthur Zakrzewski",
+        "member2": "Lauren Tan",
+        "score": 3,
+        "categories": [
+            "pledge"
+        ]
+    },
+    {
+        "member1": "Arthur Zakrzewski",
+        "member2": "Muhammad Tahir",
+        "score": 3,
+        "categories": [
             "pledge"
         ]
     },
@@ -353,11 +1093,52 @@
     },
     {
         "member1": "Leilani Kulkarni",
+        "member2": "Rishi Garg",
+        "score": 3,
+        "categories": [
+            "pledge"
+        ]
+    },
+    {
+        "member1": "Leilani Kulkarni",
         "member2": "Finn McMillan",
         "score": 5,
         "categories": [
             "major",
             "pledge"
+        ]
+    },
+    {
+        "member1": "Leilani Kulkarni",
+        "member2": "Shervin Naini",
+        "score": 3,
+        "categories": [
+            "pledge"
+        ]
+    },
+    {
+        "member1": "Jordan Chu",
+        "member2": "Amelia Hasting",
+        "score": 3,
+        "categories": [
+            "year",
+            "major"
+        ]
+    },
+    {
+        "member1": "Jordan Chu",
+        "member2": "Nicole Liu ",
+        "score": 3,
+        "categories": [
+            "exec"
+        ]
+    },
+    {
+        "member1": "Jordan Chu",
+        "member2": "Zacaria Bahojb Nouri",
+        "score": 3,
+        "categories": [
+            "exec"
         ]
     },
     {
@@ -379,6 +1160,54 @@
         ]
     },
     {
+        "member1": "Lauren Tan",
+        "member2": "Rishi Garg",
+        "score": 3,
+        "categories": [
+            "pledge"
+        ]
+    },
+    {
+        "member1": "Lauren Tan",
+        "member2": "Finn McMillan",
+        "score": 3,
+        "categories": [
+            "pledge"
+        ]
+    },
+    {
+        "member1": "Lauren Tan",
+        "member2": "Shervin Naini",
+        "score": 3,
+        "categories": [
+            "pledge"
+        ]
+    },
+    {
+        "member1": "Muhammad Tahir",
+        "member2": "Rishi Garg",
+        "score": 3,
+        "categories": [
+            "pledge"
+        ]
+    },
+    {
+        "member1": "Muhammad Tahir",
+        "member2": "Finn McMillan",
+        "score": 3,
+        "categories": [
+            "pledge"
+        ]
+    },
+    {
+        "member1": "Muhammad Tahir",
+        "member2": "Shervin Naini",
+        "score": 3,
+        "categories": [
+            "pledge"
+        ]
+    },
+    {
         "member1": "Rishi Garg",
         "member2": "Finn McMillan",
         "score": 4,
@@ -394,6 +1223,30 @@
         "categories": [
             "year",
             "pledge"
+        ]
+    },
+    {
+        "member1": "Nicole Liu ",
+        "member2": "Zacaria Bahojb Nouri",
+        "score": 3,
+        "categories": [
+            "exec"
+        ]
+    },
+    {
+        "member1": "Nicole Liu ",
+        "member2": "Nico Biabani",
+        "score": 3,
+        "categories": [
+            "exec"
+        ]
+    },
+    {
+        "member1": "Zacaria Bahojb Nouri",
+        "member2": "Nico Biabani",
+        "score": 3,
+        "categories": [
+            "exec"
         ]
     },
     {

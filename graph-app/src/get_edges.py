@@ -57,7 +57,7 @@ def generate_edges():
             score, categories = calculate_edge_score(user1_info, user2_info)
 
             # Only store meaningful edges (score > 2)
-            if score > 3:
+            if score > 1:
                 edges.append({
                     'member1': user1_info['name'],
                     'member2': user2_info['name'],
