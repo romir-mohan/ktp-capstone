@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive Graph</title>
+    <style>
+        body {
+            margin: 0;
+            background-color: darkgrey;
+            overflow: hidden;
+        }
+        #network {
+            width: 100vw;
+            height: 100vh;
+        }
+        .filter-boxes {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            display: flex;
+            gap: 10px;
+        }
+        .filter-button {
+            background-color: white;
+            border: none;
+            padding: 10px;
+            cursor: pointer;
+            border-radius: 5px;
+            font-weight: bold;
+        }
+    </style>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/vis/4.21.0/vis.min.js"></script>
+</head>
+<body>
+    <div class="filter-boxes">
+        <button class="filter-button" onclick="toggleEdges('Year')">Year</button>
+        <button class="filter-button" onclick="toggleEdges('Major')">Major</button>
+        <button class="filter-button" onclick="toggleEdges('Internship')">Internship</button>
+        <button class="filter-button" onclick="toggleEdges('Role')">Role</button>
+    </div>
+    <div id="network"></div>
+    <script type="text/javascript">
+        let nodes, edges, network;
+        let nodeMap = {}; 
+        let visibleEdges = new Set();
+
+        async function loadData() {
+            try {
+                const [nodesResponse, edgesResponse] = await Promise.all([ 
+                    fetch('graph_nodes.json'),
+                    fetch('graph_edges.json')
+                ]);
+
+                if (!nodesResponse.ok || !edgesResponse.ok) {
+                    throw new Error('Failed to load data');
+                }
+
+                const nodesData = await nodesResponse.json();
+                const edgesData = await edgesResponse.json();
+
+                createNetwork(nodesData, edgesData);
+            } catch (error) {
+                console.error('Error loading data:', error);
+            }
+        }
+
+        function createNetwork(nodesData, edgesData) {
+            nodes = new vis.DataSet();
+            edges = new vis.DataSet();
+            
+            nodesData.forEach((node, index) => {
+                const id = index + 1;
+                nodeMap[node.name] = id;
+                
+                const x = Math.random() * 4000 - 2000;
+                const y = Math.random() * 4000 - 2000;
+                
+                nodes.add({
+                    id: id,
+                    label: node.name,
+                    shape: 'dot',
+                    size: 20,
+                    color: 'darkblue',
+                    x: x,
+                    y: y
+                });
+            });
+
+            edgesData.forEach((edge, index) => {
+                const fromId = nodeMap[edge.member1];
+                const toId = nodeMap[edge.member2];
+                if (fromId && toId) {
+                    edges.add({
+                        id: `e${index}`,
+                        from: fromId,
+                        to: toId,
+                        categories: edge.categories || ['Unknown'],
+                        hidden: true
+                    });
+                }
+            });
+
+            const container = document.getElementById('network');
+            const data = { nodes: nodes, edges: edges };
+            const options = {
+                physics: { enabled: true },
+                interaction: { dragNodes: true, zoomView: true },
+                layout: { improvedLayout: false },
+                edges: { color: 'darkblue', width: 2, smooth: false }
+            };
+            
+            network = new vis.Network(container, data, options);
+        }
+
+        function toggleEdges(category) {
+            edges.get().forEach(edge => {
+                if (edge.categories.includes(category)) {
+                    let isVisible = visibleEdges.has(edge.id);
+                    edges.update({ id: edge.id, hidden: isVisible });
+                    isVisible ? visibleEdges.delete(edge.id) : visibleEdges.add(edge.id);
+                }
+            });
+        }
+
+        window.addEventListener('load', loadData);
+    </script>
+</body>
+</html>
