@@ -1,8 +1,5 @@
-from flask import Flask, jsonify
 import json
 from itertools import combinations  # Import combinations for pairwise comparisons
-
-app = Flask(__name__)
 
 # Function to read the data from 'data.txt'
 def read_data_from_file():
@@ -34,7 +31,7 @@ def calculate_edge_score(user_info1, user_info2):
     if (user_info1.get('role') not in ['Member', 'Pledge']) and (user_info2.get('role') not in ['Member', 'Pledge']):
         score += 3
         categories.append('exec')
-        
+
     internships1 = set(map(str.strip, user_info1.get('internships', '').split(','))) if user_info1.get('internships') else set()
     internships2 = set(map(str.strip, user_info2.get('internships', '').split(','))) if user_info2.get('internships') else set()
 
@@ -71,11 +68,10 @@ def generate_edges():
     return edges
 
 # Function to write edges to a JSON file
-def write_edges_to_file(filename="graph_edges.json"):
-    edges = generate_edges()
+def write_edges_to_file(edges, filename="graph_edges.json"):
     with open(filename, 'w') as file:
         json.dump(edges, file, indent=4)
 
 if __name__ == '__main__':
-    write_edges_to_file()  # Generates edges and writes to file when script runs
-    print("Edges written to graph_edges.json")
+    edges = generate_edges()  # Generate edges
+    write_edges_to_file(edges)  # Write edges to file
